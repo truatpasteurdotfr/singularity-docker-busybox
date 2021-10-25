@@ -91,7 +91,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: quay.io/singularity/singularity:v3.8.3
+      image: ghcr.io/truatpasteurdotfr/docker-c7-singularity-builder:main
       options: --privileged
     permissions:
       contents: read
