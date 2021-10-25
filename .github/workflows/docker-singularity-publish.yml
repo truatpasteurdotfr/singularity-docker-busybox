@@ -23,7 +23,7 @@ env:
 
 
 jobs:
-  build:
+  build1:
 
     runs-on: ubuntu-latest
     permissions:
@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        recipe: ["Singularity"]
+        recipe: ["Docker"]
 
     steps:
       - name: Checkout repository
@@ -69,7 +69,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-#            latest
+            latest
 #            oras://ghcr.io is tagged latest too, and seems to override the docker://ghcr.io tag -> race condition?
 
       # Build and push Docker image with Buildx (don't push on PR)
@@ -119,17 +119,10 @@ jobs:
          ls 
          if [ -f "${{ matrix.recipe }}" ]; then
             sudo -E singularity build container.sif ${{ matrix.recipe }}
-            tag=$(echo "${recipe/Singularity\./}")
-            if [ "$tag" == "Singularity" ]; then
-                tag=latest
+            tag=latest
             fi
             # Build the container and name by tag
             echo "Tag is $tag."
-            echo "tag=$tag" >> $GITHUB_ENV
-         else
-           echo "${{ matrix.recipe }} is not found."
-           echo "Present working directory: $PWD"
-           ls
          fi
 
       - name: Login and Deploy Container
